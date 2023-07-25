@@ -1,7 +1,9 @@
+import { InsertActivityForm } from "@/components/dashboard/insert-activity-form";
+
 export default function Dashboard() {
     return (
-        <div>
-            <h1>Dashboard</h1>
-        </div>
+        <>
+            <InsertActivityForm />            
+        </>
     );
 }
