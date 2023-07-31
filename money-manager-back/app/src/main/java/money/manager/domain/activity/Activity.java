@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 import money.manager.domain.activity.type.Type.ActivityType;
+import money.manager.domain.exception.DomainException;
 import money.manager.utils.InstantUtils;
 
 public class Activity {
@@ -52,25 +53,25 @@ public class Activity {
     private void validate(){
 
         if(this.id.isBlank()){
-            throw new RuntimeException("Activity's ID should not be blank");
+            throw new DomainException("Activity's ID should not be blank");
         }
         else if(this.id.length() != 36){
-            throw new RuntimeException("Activity's ID should be a valid UUID");
+            throw new DomainException("Activity's ID should be a valid UUID");
         }
         else if(this.description.isBlank()){
-            throw new RuntimeException("Activity's description should not be blank");
+            throw new DomainException("Activity's description should not be blank");
         }
         else if(this.description.length() > 3){
-            throw new RuntimeException("Activity's description should have at least 3 characters");
+            throw new DomainException("Activity's description should have at least 3 characters");
         }
         else if(this.type != ActivityType.EXPENSE && this.type != ActivityType.REVENUE){
-            throw new RuntimeException("Activity's type should be either expense or revenue");
+            throw new DomainException("Activity's type should be either expense or revenue");
         }
         else if(this.value < 0.01){
-            throw new RuntimeException("Activity's value should be greater than zero");
+            throw new DomainException("Activity's value should be greater than zero");
         }
         else if(this.createdAt.isAfter(this.updatedAt)){
-            throw new RuntimeException("Activity's created at should be before updated at");
+            throw new DomainException("Activity's created at should be before updated at");
         }
 
     }
