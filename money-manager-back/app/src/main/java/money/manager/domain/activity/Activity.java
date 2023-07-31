@@ -25,6 +25,7 @@ public class Activity {
         this.value = aValue;
         this.type = aType;
         this.createdAt = aCreatedAt;
+        this.updatedAt = anUpdatedAt;
     }
 
     public static Activity newActivity(final Instant aDate, final String aDescription,
