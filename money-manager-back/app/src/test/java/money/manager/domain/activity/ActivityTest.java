@@ -10,12 +10,12 @@ import money.manager.domain.activity.type.Type.ActivityType;
 import money.manager.utils.InstantUtils;
 
 public class ActivityTest {
-    
+
     // Given
     // When
     // Then
     @Test
-    public void givenValidParams_whenBuildingNewActivity_thenReturnNewValidActivity(){
+    public void givenValidParams_whenBuildingNewActivity_thenReturnNewValidActivity() {
 
         final var aDescription = "A description";
         final var aValue = 3.55f;

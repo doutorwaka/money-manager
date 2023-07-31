@@ -26,6 +26,8 @@ public class Activity {
         this.type = aType;
         this.createdAt = aCreatedAt;
         this.updatedAt = anUpdatedAt;
+
+        this.validate();
     }
 
     public static Activity newActivity(final Instant aDate, final String aDescription,
@@ -45,6 +47,32 @@ public class Activity {
             final float aValue, final ActivityType aType, final Instant aCreatedAt,
             final Instant anUpdatedAt) {
         return new Activity(anId, aDate, aDescription, aValue, aType, aCreatedAt, anUpdatedAt);
+    }
+
+    private void validate(){
+
+        if(this.id.isBlank()){
+            throw new RuntimeException("Activity's ID should not be blank");
+        }
+        else if(this.id.length() != 36){
+            throw new RuntimeException("Activity's ID should be a valid UUID");
+        }
+        else if(this.description.isBlank()){
+            throw new RuntimeException("Activity's description should not be blank");
+        }
+        else if(this.description.length() > 3){
+            throw new RuntimeException("Activity's description should have at least 3 characters");
+        }
+        else if(this.type != ActivityType.EXPENSE && this.type != ActivityType.REVENUE){
+            throw new RuntimeException("Activity's type should be either expense or revenue");
+        }
+        else if(this.value < 0.01){
+            throw new RuntimeException("Activity's value should be greater than zero");
+        }
+        else if(this.createdAt.isAfter(this.updatedAt)){
+            throw new RuntimeException("Activity's created at should be before updated at");
+        }
+
     }
 
     /**
