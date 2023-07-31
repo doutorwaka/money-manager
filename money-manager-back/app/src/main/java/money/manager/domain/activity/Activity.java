@@ -50,27 +50,21 @@ public class Activity {
         return new Activity(anId, aDate, aDescription, aValue, aType, aCreatedAt, anUpdatedAt);
     }
 
-    private void validate(){
+    private void validate() {
 
-        if(this.id.isBlank()){
+        if (this.id.isBlank()) {
             throw new DomainException("Activity's ID should not be blank");
-        }
-        else if(this.id.length() != 36){
+        } else if (this.id.length() != 36) {
             throw new DomainException("Activity's ID should be a valid UUID");
-        }
-        else if(this.description.isBlank()){
+        } else if (this.description.isBlank()) {
             throw new DomainException("Activity's description should not be blank");
-        }
-        else if(this.description.length() > 3){
+        } else if (this.description.length() > 3) {
             throw new DomainException("Activity's description should have at least 3 characters");
-        }
-        else if(this.type != ActivityType.EXPENSE && this.type != ActivityType.REVENUE){
+        } else if (this.type != ActivityType.EXPENSE && this.type != ActivityType.REVENUE) {
             throw new DomainException("Activity's type should be either expense or revenue");
-        }
-        else if(this.value < 0.01){
+        } else if (this.value < 0.01) {
             throw new DomainException("Activity's value should be greater than zero");
-        }
-        else if(this.createdAt.isAfter(this.updatedAt)){
+        } else if (this.createdAt.isAfter(this.updatedAt)) {
             throw new DomainException("Activity's created at should be before updated at");
         }
 
