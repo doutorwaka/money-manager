@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import money.manager.domain.activity.Activity;
-import money.manager.domain.activity.type.Type.ActivityType;
 import money.manager.domain.gateway.ActivityGateway;
 import money.manager.repository.activity.jpa.ActivityJpaEntity;
 import money.manager.repository.activity.jpa.ActivityJpaRepository;
