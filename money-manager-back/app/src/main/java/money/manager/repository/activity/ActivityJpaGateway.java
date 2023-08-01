@@ -3,6 +3,9 @@ package money.manager.repository.activity;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.OptimisticLockingFailureException;
+
+import jakarta.persistence.PersistenceException;
 import money.manager.domain.activity.Activity;
 import money.manager.domain.gateway.ActivityGateway;
 import money.manager.repository.activity.jpa.ActivityJpaEntity;
@@ -24,12 +27,22 @@ public class ActivityJpaGateway implements ActivityGateway {
     public void create(final Activity anActivity) {
         final var anActivityEntity = ActivityJpaEntity.from(anActivity);
 
-        this.activityRepository.save(anActivityEntity);
+        try {
+            this.activityRepository.save(anActivityEntity);
+        } catch (IllegalArgumentException e) {
+            throw new PersistenceException(e.getMessage());
+        } catch (OptimisticLockingFailureException e) {
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
     @Override
     public void delete(final String anId) {
-        this.activityRepository.deleteById(anId);
+        try {
+            this.activityRepository.deleteById(anId);
+        } catch (IllegalArgumentException e) {
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
     @Override
