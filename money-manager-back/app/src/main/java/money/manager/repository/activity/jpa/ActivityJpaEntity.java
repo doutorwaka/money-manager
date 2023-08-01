@@ -64,6 +64,16 @@ public class ActivityJpaEntity {
                 anActivity.getUpdatedAt());
     }
 
+    public Activity toModel() {
+        return Activity.with(this.getId(),
+                this.getDate(),
+                this.getDescription(),
+                this.getValue(),
+                ActivityType.values()[this.getType()],
+                this.getCreatedAt(),
+                this.getUpdatedAt());
+    }
+
     /**
      * @return the id
      */
