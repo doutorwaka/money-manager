@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0-debian
+    container_name: mysql_db
+    tty: true
+    environment:
+      - MYSQL_DATABASE=moneymanager
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/1.sql

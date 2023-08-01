@@ -15,7 +15,7 @@ public class App {
 
     private static final Logger LOG = LoggerFactory.getLogger(App.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {        
 
         LOG.info("Starting money.manager... ");
 
