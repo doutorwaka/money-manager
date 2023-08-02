@@ -16,7 +16,7 @@ public class InsertActivityInputToActivityMapper implements Function<InsertActiv
     @Override
     public Activity apply(final InsertActivityInputDto input) {
 
-        if (input.type().equals(ActivityType.REVENUE)) {
+        if (input.type().trim().toUpperCase().equals(ActivityType.REVENUE.toString())) {
             final var anActivity = Activity.newActivity(
                     input.date(),
                     input.description(),
@@ -24,7 +24,7 @@ public class InsertActivityInputToActivityMapper implements Function<InsertActiv
                     ActivityType.REVENUE);
 
             return anActivity;
-        } else if (input.type().equals(ActivityType.EXPENSE)) {
+        } else if (input.type().trim().toUpperCase().equals(ActivityType.EXPENSE.toString())) {
             final var anActivity = Activity.newActivity(
                     input.date(),
                     input.description(),

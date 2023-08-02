@@ -3,10 +3,16 @@ package money.manager.controller.activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import money.manager.controller.activity.dto.InsertActivityRequestDto;
+import money.manager.controller.activity.dto.InsertActivityResponseDto;
 import money.manager.controller.activity.dto.ListActivitiesResponseDto;
+import money.manager.controller.activity.dto.mapper.InsertActivityOutputServiceToInsertActivityResponseMapper;
+import money.manager.controller.activity.dto.mapper.InsertActivityRequestToInsertActivityServiceMapper;
 import money.manager.controller.activity.dto.mapper.ListActivitiesToListActivitiesResponseMapper;
 import money.manager.repository.activity.ActivityJpaGateway;
 import money.manager.repository.activity.jpa.ActivityJpaRepository;
@@ -23,7 +29,6 @@ public class ActivityController {
     public ResponseEntity<ListActivitiesResponseDto> listActivities() {
 
         final var aGateway = ActivityJpaGateway.build(activityRepository);
-
         final var aService = ActivityServiceImplementation.build(aGateway);
 
         final var aList = aService.listActivities();
@@ -34,6 +39,25 @@ public class ActivityController {
 
         return ResponseEntity.ok().body(aResponse);
 
+    }
+
+    @PostMapping
+    public ResponseEntity<InsertActivityResponseDto> insertActivity(@RequestBody InsertActivityRequestDto input) {
+
+        System.out.println(input);
+
+        final var aGateway = ActivityJpaGateway.build(activityRepository);
+        final var aService = ActivityServiceImplementation.build(aGateway);
+
+        final var aServiceInput = InsertActivityRequestToInsertActivityServiceMapper.build()
+                .apply(input);
+
+        final var aServiceResponse = aService.insertActivity(aServiceInput);
+
+        final var aResponse = InsertActivityOutputServiceToInsertActivityResponseMapper.build()
+                .apply(aServiceResponse);
+
+        return ResponseEntity.ok().body(aResponse);
     }
 
 }

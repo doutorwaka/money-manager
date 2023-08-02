@@ -47,7 +47,15 @@ public class Activity {
     public static Activity with(final String anId, final Instant aDate, final String aDescription,
             final float aValue, final ActivityType aType, final Instant aCreatedAt,
             final Instant anUpdatedAt) {
-        return new Activity(anId, aDate, aDescription, aValue, aType, aCreatedAt, anUpdatedAt);
+                
+        return new Activity(
+                anId,
+                aDate,
+                aDescription,
+                aValue,
+                aType,
+                aCreatedAt,
+                anUpdatedAt);
     }
 
     private void validate() {
@@ -58,7 +66,7 @@ public class Activity {
             throw new DomainException("Activity's ID should be a valid UUID");
         } else if (this.description.isBlank()) {
             throw new DomainException("Activity's description should not be blank");
-        } else if (this.description.length() > 3) {
+        } else if (this.description.length() < 3) {
             throw new DomainException("Activity's description should have at least 3 characters");
         } else if (this.type != ActivityType.EXPENSE && this.type != ActivityType.REVENUE) {
             throw new DomainException("Activity's type should be either expense or revenue");
