@@ -1,5 +1,7 @@
 package money.manager.service.auth;
 
+import org.springframework.stereotype.Service;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -11,6 +13,7 @@ import money.manager.service.auth.exception.AuthException;
 import money.manager.service.auth.exception.LoginException;
 import money.manager.utils.InstantUtils;
 
+@Service
 public class AuthService {
 
     // Usuário único da aplicação
