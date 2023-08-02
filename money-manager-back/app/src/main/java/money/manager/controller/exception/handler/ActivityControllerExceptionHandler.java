@@ -17,7 +17,8 @@ import money.manager.utils.InstantUtils;
 public class ActivityControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = { DomainException.class })
-    protected ResponseEntity<ExceptionResponseBody> handleDomainExceptions(final DomainException anException,
+    protected ResponseEntity<ExceptionResponseBody> handleDomainExceptions(
+            final DomainException anException,
             final HttpServletRequest aRequest) {
 
         final var aBody = new ExceptionResponseBody(
@@ -30,7 +31,8 @@ public class ActivityControllerExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler(value = { PersistenceException.class })
-    protected ResponseEntity<ExceptionResponseBody> handleDomainExceptions(final PersistenceException anException,
+    protected ResponseEntity<ExceptionResponseBody> handleDomainExceptions(
+            final PersistenceException anException,
             final HttpServletRequest aRequest) {
 
         final var aBody = new ExceptionResponseBody(
@@ -43,7 +45,8 @@ public class ActivityControllerExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler(value = { ServiceException.class })
-    protected ResponseEntity<ExceptionResponseBody> handleDomainExceptions(final ServiceException anException,
+    protected ResponseEntity<ExceptionResponseBody> handleDomainExceptions(
+            final ServiceException anException,
             final HttpServletRequest aRequest) {
 
         final var aBody = new ExceptionResponseBody(
@@ -56,7 +59,8 @@ public class ActivityControllerExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler(value = { Exception.class })
-    protected ResponseEntity<ExceptionResponseBody> handleDomainExceptions(final Exception anException,
+    protected ResponseEntity<ExceptionResponseBody> handleDomainExceptions(
+            final Exception anException,
             final HttpServletRequest aRequest) {
 
         final var aBody = new ExceptionResponseBody(
