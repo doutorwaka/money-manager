@@ -2,7 +2,9 @@ package money.manager.controller.activity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,8 +46,6 @@ public class ActivityController {
     @PostMapping
     public ResponseEntity<InsertActivityResponseDto> insertActivity(@RequestBody InsertActivityRequestDto input) {
 
-        System.out.println(input);
-
         final var aGateway = ActivityJpaGateway.build(activityRepository);
         final var aService = ActivityServiceImplementation.build(aGateway);
 
@@ -58,6 +58,16 @@ public class ActivityController {
                 .apply(aServiceResponse);
 
         return ResponseEntity.ok().body(aResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteActivityById(@PathVariable("id") final String anId) {
+        final var aGateway = ActivityJpaGateway.build(activityRepository);
+        final var aService = ActivityServiceImplementation.build(aGateway);
+
+        aService.removeActivity(anId);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
