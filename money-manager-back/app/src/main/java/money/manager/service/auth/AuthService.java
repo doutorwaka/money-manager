@@ -1,5 +1,8 @@
 package money.manager.service.auth;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -14,7 +17,7 @@ import money.manager.service.auth.exception.LoginException;
 import money.manager.utils.InstantUtils;
 
 @Service
-public class AuthService {
+public class AuthService implements UserDetailsService {
 
     // Usuário único da aplicação
     final User uniqueUser = User.with("doutorwaka@gmail.com", "doutorwaka");
@@ -68,10 +71,21 @@ public class AuthService {
             final var aSubject = aDecodedToken.getSubject();
 
             return aSubject;
-            
+
         } catch (Exception e) {
             return "";
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+
+        if (username.equals(this.uniqueUser.getUsername())) {
+            return this.uniqueUser;
+        } else {
+            throw new UsernameNotFoundException("User not found");
+        }
+
     }
 
 }
