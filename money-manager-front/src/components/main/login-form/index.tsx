@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { frontendApi } from "@/lib/api";
 
 const loginFormSchema = z.object({
     email: z.string().email({ message: "E-mail inválido" }),
@@ -25,8 +26,15 @@ export function LoginForm() {
         }
     });
 
-    function handleLoginSubmit({ email, password }: LoginFormType) {
-        console.log(email, password);
+    async function handleLoginSubmit({ email, password }: LoginFormType) {
+
+        const data = JSON.stringify({
+            email,
+            password
+        });
+
+        await frontendApi.post("/auth/login", data);
+
     }
 
     return (
