@@ -8,6 +8,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { frontendApi } from "@/lib/api";
+import { LoginResponseType } from "@/app/api/auth/login/route";
+import { useState } from "react";
 
 const loginFormSchema = z.object({
     email: z.string().email({ message: "E-mail inválido" }),
@@ -17,6 +19,8 @@ const loginFormSchema = z.object({
 type LoginFormType = z.infer<typeof loginFormSchema>;
 
 export function LoginForm() {
+
+    const [message, setMessage] = useState(<></>);
 
     const loginForm = useForm<LoginFormType>({
         resolver: zodResolver(loginFormSchema),
@@ -33,8 +37,20 @@ export function LoginForm() {
             password
         });
 
-        await frontendApi.post("/auth/login", data);
+        try {
+            const result = await frontendApi.post("/auth/login", data);
 
+            const { token, error } = result.data as LoginResponseType;
+
+            if (error) {
+                setMessage(<p>Deu erro! {error}</p>);
+            } else {
+                setMessage(<p>Deu certo! {token}</p>);
+            }
+
+        } catch (e) {
+
+        }
     }
 
     return (
@@ -48,6 +64,7 @@ export function LoginForm() {
 
                     <Form {...loginForm}>
                         <form onSubmit={loginForm.handleSubmit(handleLoginSubmit)} className="space-y-2">
+                            {message}
                             <FormField
                                 control={loginForm.control}
                                 name="email"
