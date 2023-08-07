@@ -10,6 +10,8 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { frontendApi } from "@/lib/api";
 import { LoginResponseType } from "@/app/api/auth/login/route";
 import { useState } from "react";
+import { AxiosError } from "axios";
+import { CustomAlert, CustomAlertType } from "@/components/general/custom-alert";
 
 const loginFormSchema = z.object({
     email: z.string().email({ message: "E-mail inválido" }),
@@ -43,13 +45,42 @@ export function LoginForm() {
             const { token, error } = result.data as LoginResponseType;
 
             if (error) {
-                setMessage(<p>Deu erro! {error}</p>);
+                const message = <CustomAlert
+                    type={CustomAlertType.ERROR}
+                    title="Erro ao logar-se!"
+                    message={error}
+                />;
+
+                setMessage(message);
+
+            } else if (token) {
+                const message = <CustomAlert
+                    type={CustomAlertType.SUCCESS}
+                    title="Sucesso ao logar-se!"
+                    message={token}
+                />;
+
+                setMessage(message);
             } else {
-                setMessage(<p>Deu certo! {token}</p>);
+                const message = <CustomAlert
+                    type={CustomAlertType.ERROR}
+                    title="Erro ao logar-se!"
+                    message="Erro não identificado. Por favor tente mais tarde"
+                />;
+
+                setMessage(message);
             }
 
         } catch (e) {
+            const axiosError = e as AxiosError;
 
+            const message = <CustomAlert
+                type={CustomAlertType.ERROR}
+                title="Erro ao logar-se!"
+                message={axiosError.message}
+            />;
+
+            setMessage(message);
         }
     }
 
