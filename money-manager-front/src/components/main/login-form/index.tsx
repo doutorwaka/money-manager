@@ -39,7 +39,7 @@ export function LoginForm() {
                     </span>
 
                     <Form {...loginForm}>
-                        <form onSubmit={loginForm.handleSubmit(handleLoginSubmit)}>
+                        <form onSubmit={loginForm.handleSubmit(handleLoginSubmit)} className="space-y-2">
                             <FormField
                                 control={loginForm.control}
                                 name="email"
