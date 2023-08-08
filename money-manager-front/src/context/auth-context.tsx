@@ -13,7 +13,8 @@ type AuthContextType = {
 export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthContextProvider({ children }: { children: React.ReactNode }) {
-    var isAuthenticated = false;
+    
+    var isAuthenticated = !!recoveryToken();
 
     function signIn(token: string) {
         setCookie("money-manager.token", token, {

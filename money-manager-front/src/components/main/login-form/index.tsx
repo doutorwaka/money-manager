@@ -9,9 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { frontendApi } from "@/lib/api";
 import { LoginResponseType } from "@/app/api/auth/login/route";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AxiosError } from "axios";
 import { CustomAlert, CustomAlertType } from "@/components/general/custom-alert";
+import { AuthContext } from "@/context/auth-context";
+import { useRouter } from "next/navigation";
 
 const loginFormSchema = z.object({
     email: z.string().email({ message: "E-mail inválido" }),
@@ -23,6 +25,10 @@ type LoginFormType = z.infer<typeof loginFormSchema>;
 export function LoginForm() {
 
     const [message, setMessage] = useState(<></>);
+
+    const authContext = useContext(AuthContext);
+
+    const router = useRouter();
 
     const loginForm = useForm<LoginFormType>({
         resolver: zodResolver(loginFormSchema),
@@ -44,28 +50,15 @@ export function LoginForm() {
 
             const { token, error } = result.data as LoginResponseType;
 
-            if (error) {
+            if (token) {
+                authContext.signIn(token);
+                router.push("/dashboard");
+            }
+            else {
                 const message = <CustomAlert
                     type={CustomAlertType.ERROR}
                     title="Erro ao logar-se!"
-                    message={error}
-                />;
-
-                setMessage(message);
-
-            } else if (token) {
-                const message = <CustomAlert
-                    type={CustomAlertType.SUCCESS}
-                    title="Sucesso ao logar-se!"
-                    message={token}
-                />;
-
-                setMessage(message);
-            } else {
-                const message = <CustomAlert
-                    type={CustomAlertType.ERROR}
-                    title="Erro ao logar-se!"
-                    message="Erro não identificado. Por favor tente mais tarde"
+                    message={error || "Erro desconhecido"}
                 />;
 
                 setMessage(message);
