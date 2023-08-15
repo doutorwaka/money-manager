@@ -19,10 +19,10 @@ enum ActivityType {
 }
 
 const insertFormSchema = z.object({
-    date: z.date(),
-    description: z.string(),
-    value: z.coerce.number(),
-    type: z.nativeEnum(ActivityType)
+    date: z.date({required_error: "Insira uma data"}),
+    description: z.string({required_error: "Insira uma descrição"}).min(3, {message: "Pelo menos três caracteres"}),
+    value: z.coerce.number({required_error: "Insira um valor"}).min(0.01, {message: "O valor precisa ser maior que zero"}),
+    type: z.nativeEnum(ActivityType, {required_error: "Selecione um tipo"})
 });
 
 type InsertFormType = z.infer<typeof insertFormSchema>;
@@ -34,7 +34,8 @@ export function InsertActivityForm() {
         defaultValues: {
             date: new Date(),
             description: "",
-            value: 0,
+            // @ts-expect-error
+            value: "",
             type: ActivityType.REVENUE
         }
     });
@@ -44,9 +45,9 @@ export function InsertActivityForm() {
     }
 
     return (
-        <div className="flex space-x-2 p-8">
+        <div>
             <Form {...insertForm}>
-                <form onSubmit={insertForm.handleSubmit(onInsertFormSubmit)}>
+                <form onSubmit={insertForm.handleSubmit(onInsertFormSubmit)} className="flex space-x-2 p-8">
                     <FormField
                         control={insertForm.control}
                         name="date"
@@ -85,7 +86,7 @@ export function InsertActivityForm() {
                         name="description"
                         render={({ field }) => {
                             return (
-                                <FormItem>
+                                <FormItem className="w-full">
                                     <FormControl>
                                         <Input type="text" placeholder="Insira a descrição da atividade..." {...field} />
                                     </FormControl>
@@ -100,7 +101,7 @@ export function InsertActivityForm() {
                         name="value"
                         render={({ field }) => {
                             return (
-                                <FormItem>
+                                <FormItem className="w-max">
                                     <FormControl>
                                         <Input type="number" className="w-max" placeholder="Digite o valor..." {...field} />
                                     </FormControl>
@@ -115,10 +116,10 @@ export function InsertActivityForm() {
                         name="type"
                         render={({ field }) => {
                             return (
-                                <FormItem>
+                                <FormItem className="w-max">
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl>
-                                            <SelectTrigger className="w-80">
+                                            <SelectTrigger className="w-max">
                                                 <SelectValue placeholder="Selecione o tipo" />
                                             </SelectTrigger>
                                         </FormControl>
