@@ -6,8 +6,10 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { frontendApi } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -19,10 +21,10 @@ enum ActivityType {
 }
 
 const insertFormSchema = z.object({
-    date: z.date({required_error: "Insira uma data"}),
-    description: z.string({required_error: "Insira uma descrição"}).min(3, {message: "Pelo menos três caracteres"}),
-    value: z.coerce.number({required_error: "Insira um valor"}).min(0.01, {message: "O valor precisa ser maior que zero"}),
-    type: z.nativeEnum(ActivityType, {required_error: "Selecione um tipo"})
+    date: z.date({ required_error: "Insira uma data" }),
+    description: z.string({ required_error: "Insira uma descrição" }).min(3, { message: "Pelo menos três caracteres" }),
+    value: z.coerce.number({ required_error: "Insira um valor" }),
+    type: z.nativeEnum(ActivityType, { required_error: "Selecione um tipo" })
 });
 
 type InsertFormType = z.infer<typeof insertFormSchema>;
@@ -40,8 +42,29 @@ export function InsertActivityForm() {
         }
     });
 
-    async function onInsertFormSubmit(date: InsertFormType) {
-        console.log(date);
+    async function onInsertFormSubmit({ date, description, value, type }: InsertFormType) {
+
+        const formatedData = JSON.stringify({
+            date: date.toISOString(),
+            description,
+            value,
+            type
+        });
+
+        try {
+
+            const result = await frontendApi.post("/activities", formatedData);
+
+            console.log("Inserido com sucesso!");
+
+        } catch (e) {
+            const axiosError = e as AxiosError;
+
+            console.log(axiosError.response?.data.code, axiosError.response?.data.message);
+
+            
+        }
+
     }
 
     return (

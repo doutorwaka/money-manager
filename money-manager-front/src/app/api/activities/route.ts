@@ -1,5 +1,6 @@
 import { backendApi } from "@/lib/api";
 import { AxiosError } from "axios";
+import { stat } from "fs";
 import { NextRequest } from "next/server";
 
 type BackendResponseErrrorType = {
@@ -16,7 +17,7 @@ type InsertActivityRequestType = {
     value: number
 }
 
-async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) {
 
     const authToken = request.cookies.get("money-manager.token")?.value;
 
@@ -29,7 +30,7 @@ async function POST(request: NextRequest) {
 
         const jsonData = JSON.stringify(data);
 
-        const result = backendApi.post("/activities", jsonData, {
+        const result = await backendApi.post("/activities", jsonData, {
             headers: {
                 "Authorization": `Bearer ${authToken}`
             }
@@ -42,8 +43,10 @@ async function POST(request: NextRequest) {
 
         const { status, error } = axiosError.response?.data as BackendResponseErrrorType;
 
-        if(status){
-            return new Response(JSON.stringify(error), { status });
+        console.log(status, error);
+
+        if (status) {
+            return new Response(JSON.stringify(new AxiosError(error, status.toString())), { status });
         } else {
             return new Response(JSON.stringify(axiosError.message), { status: axiosError.status });
         }
