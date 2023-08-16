@@ -1,7 +1,6 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { RowSpacingIcon } from "@radix-ui/react-icons"
 import { ColumnDef } from "@tanstack/react-table"
 
 // This type is used to define the shape of our data.
@@ -53,7 +52,10 @@ export const columns: ColumnDef<Activity>[] = [
     id: "actions",
     header: "Ações",
     cell: ({ row }) => {
-      return <Button variant="ghost">Remover</Button>
+
+      const id = row.original.id;
+
+      return <Button variant="ghost" onClick={()=>alert(id)}>Remover</Button>
     }
   }
 ]
