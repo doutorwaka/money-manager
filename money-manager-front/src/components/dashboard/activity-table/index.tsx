@@ -43,7 +43,7 @@ export function ActivityTable() {
   const data = getData()
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto my-8">
       <DataTable columns={columns} data={data} />
     </div>
   )

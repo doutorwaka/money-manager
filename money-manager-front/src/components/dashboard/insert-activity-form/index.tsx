@@ -1,5 +1,6 @@
 'use client'
 
+import { CustomAlert, CustomAlertType } from "@/components/general/custom-alert";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
@@ -9,6 +10,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { frontendApi } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { data } from "autoprefixer";
 import { AxiosError } from "axios";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -59,16 +61,26 @@ export function InsertActivityForm() {
 
             const result = await frontendApi.post("/activities", formatedData);
 
-            setInsertMessage(<>Inserido com sucesso!</>)
+            const message = <CustomAlert 
+                title="Atividade inserida com sucesso!"
+                message={`A ${type} foi inserida com sucesso!`}
+                type={CustomAlertType.SUCCESS}
+            />
+
+            setInsertMessage(message);
 
         } catch (e) {
             const axiosError = e as AxiosError;
 
             setInsertMessage(<>Deu ruim!</>);
 
-            console.log(axiosError.response?.data.code, axiosError.response?.data.message);
+            const message = <CustomAlert 
+                title={`Erro ao inserir a atividade!`}
+                message={`${axiosError.response?.data.message}. Código ${axiosError.response?.data.code}`}
+                type={CustomAlertType.ERROR}
+            />
 
-            
+            setInsertMessage(message);
         }
 
     }
@@ -76,7 +88,7 @@ export function InsertActivityForm() {
     return (
         <div>
             <Form {...insertForm}>
-                <form onSubmit={insertForm.handleSubmit(onInsertFormSubmit)} className="flex space-x-2 p-8">
+                <form onSubmit={insertForm.handleSubmit(onInsertFormSubmit)} className="flex space-x-2 p-8 pb-4">
                     <FormField
                         control={insertForm.control}
                         name="date"
