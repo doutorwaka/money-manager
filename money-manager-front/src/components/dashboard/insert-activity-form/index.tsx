@@ -12,7 +12,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import JSXStyle from "styled-jsx/style";
 import { z } from "zod";
 
 enum ActivityType {
@@ -30,6 +32,8 @@ const insertFormSchema = z.object({
 type InsertFormType = z.infer<typeof insertFormSchema>;
 
 export function InsertActivityForm() {
+
+    const [insertMessage, setInsertMessage] = useState<JSX.Element>(<></>);
 
     const insertForm = useForm<InsertFormType>({
         resolver: zodResolver(insertFormSchema),
@@ -55,10 +59,12 @@ export function InsertActivityForm() {
 
             const result = await frontendApi.post("/activities", formatedData);
 
-            console.log("Inserido com sucesso!");
+            setInsertMessage(<>Inserido com sucesso!</>)
 
         } catch (e) {
             const axiosError = e as AxiosError;
+
+            setInsertMessage(<>Deu ruim!</>);
 
             console.log(axiosError.response?.data.code, axiosError.response?.data.message);
 
@@ -158,6 +164,7 @@ export function InsertActivityForm() {
                     />
                     <Button type="submit">Incluir</Button>
                 </form>
+                {insertMessage}
             </Form>
         </div>
     );
