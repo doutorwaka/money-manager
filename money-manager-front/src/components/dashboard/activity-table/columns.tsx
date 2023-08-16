@@ -20,8 +20,8 @@ export const columns: ColumnDef<Activity>[] = [
     accessorKey: "date",
     header: "Data",
     cell: ({ row }) => {
-      const aDate = row.getValue("date") as Date;
-      const formatedDate = aDate.getDate() + "/" + (aDate.getMonth() + 1) + "/" + aDate.getFullYear();
+      const aDate = new Date(row.getValue("date"));
+      const formatedDate = `${aDate.getDate()}/${aDate.getMonth()}/${aDate.getFullYear()}`;
       return <p>{formatedDate}</p>
     }
   },
@@ -52,7 +52,7 @@ export const columns: ColumnDef<Activity>[] = [
   {
     id: "actions",
     header: "Ações",
-    cell: ({row})=>{
+    cell: ({ row }) => {
       return <Button variant="ghost">Remover</Button>
     }
   }

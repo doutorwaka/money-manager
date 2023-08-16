@@ -1,46 +1,52 @@
+'use client'
+
+import { frontendApi } from "@/lib/api";
+import { useEffect, useState } from "react";
 import { Activity, columns } from "./columns"
 import { DataTable } from "./data-table"
 
-const data: Activity[] = [
-    {
-        id: "1",
-        date: new Date("07-25-2023"),
-        description: "Pagamento de conta de luz",
-        value: 250.95,
-        type: "expense"
-    }, 
+type ActivityType = {
+  id: string;
+  date: Date;
+  description: string;
+  value: number;
+  type: "expense" | "revenue";
+}
 
-    {
-        id: "2",
-        date: new Date("07-20-2023"),
-        description: "Pagamento de internet",
-        value: 99.90,
-        type: "expense"
-    },
+type ActivitiesType = {
+  activities: ActivityType[];
+}
 
-    {
-        id: "3",
-        date: new Date("07-20-2023"),
-        description: "Pagamento de aluguel",
-        value: 1200.00,
-        type: "expense"
-    },
-    {
-        id: "4",
-        date: new Date("07-05-2023"),
-        description: "Salário de julho",
-        value: 2000,
-        type: "revenue"
-    },
-]
+async function getData(): Promise<ActivityType[]> {
 
-function getData(): Activity[] {
-  // Fetch data from your API here.
+  var data: ActivityType[] = [];
+
+  try {
+    const result = await frontendApi.get("/activities");
+
+    const { activities } = result.data as ActivitiesType;
+
+    if (activities) {
+      data = activities;
+    }
+
+  } catch (e) {
+    data = [];
+  }
+
   return data;
+
 }
 
 export function ActivityTable() {
-  const data = getData()
+
+  const [data, setData] = useState<ActivityType[]>([]);
+
+  useEffect(() => {
+    getData().then((response) => {
+      setData(response);
+    });
+  }, []);
 
   return (
     <div className="container mx-auto my-8">

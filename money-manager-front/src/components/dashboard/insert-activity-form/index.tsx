@@ -25,8 +25,13 @@ enum ActivityType {
 
 const insertFormSchema = z.object({
     date: z.date({ required_error: "Insira uma data" }),
-    description: z.string({ required_error: "Insira uma descrição" }).min(3, { message: "Pelo menos três caracteres" }),
-    value: z.coerce.number({ required_error: "Insira um valor" }),
+
+    description: z.string({ required_error: "Insira uma descrição" })
+        .min(3, { message: "Pelo menos três caracteres" }),
+
+    value: z.coerce.number({ required_error: "Insira um valor" })
+        .min(0.01, { message: "Valor deve ser maior que zero" }),
+
     type: z.nativeEnum(ActivityType, { required_error: "Selecione um tipo" })
 });
 
@@ -60,7 +65,7 @@ export function InsertActivityForm() {
 
             const result = await frontendApi.post("/activities", formatedData);
 
-            const message = <CustomAlert 
+            const message = <CustomAlert
                 title="Atividade inserida com sucesso!"
                 message={`A ${type} foi inserida com sucesso!`}
                 type={CustomAlertType.SUCCESS}
@@ -72,11 +77,11 @@ export function InsertActivityForm() {
         } catch (e) {
             const axiosError = e as AxiosError;
 
-            const data = axiosError.response?.data as {message: string, code: number};
+            const data = axiosError.response?.data as { message: string, code: number };
 
             var errorMessage;
 
-            if(data){
+            if (data) {
                 errorMessage = data.message;
             } else {
                 errorMessage = axiosError.message;
@@ -84,7 +89,7 @@ export function InsertActivityForm() {
 
             setInsertMessage(<>Deu ruim!</>);
 
-            const message = <CustomAlert 
+            const message = <CustomAlert
                 title={`Erro ao inserir a atividade!`}
                 message={`${errorMessage}.`}
                 type={CustomAlertType.ERROR}
@@ -94,7 +99,7 @@ export function InsertActivityForm() {
             setInsertMessage(message);
         }
 
-        setTimeout(()=>setInsertMessage(<></>), 2500); // 2,5 seconds
+        setTimeout(() => setInsertMessage(<></>), 2500); // 2,5 seconds
 
     }
 
