@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
+import { RemoveButton } from "./remove-button"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -52,10 +53,8 @@ export const columns: ColumnDef<Activity>[] = [
     id: "actions",
     header: "Ações",
     cell: ({ row }) => {
-
       const id = row.original.id;
-
-      return <Button variant="ghost" onClick={()=>alert(id)}>Remover</Button>
+      return <RemoveButton id={id} />
     }
   }
 ]
