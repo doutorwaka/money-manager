@@ -7,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { ActivityTableContext } from "@/context/activity-table-context";
 import { frontendApi } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +15,7 @@ import { data } from "autoprefixer";
 import { AxiosError } from "axios";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -40,6 +41,8 @@ type InsertFormType = z.infer<typeof insertFormSchema>;
 export function InsertActivityForm() {
 
     const [insertMessage, setInsertMessage] = useState<JSX.Element>(<></>);
+
+    const activityTableContext = useContext(ActivityTableContext);
 
     const insertForm = useForm<InsertFormType>({
         resolver: zodResolver(insertFormSchema),
@@ -73,6 +76,8 @@ export function InsertActivityForm() {
             />
 
             setInsertMessage(message);
+
+            activityTableContext.refreshTable();
 
         } catch (e) {
             const axiosError = e as AxiosError;

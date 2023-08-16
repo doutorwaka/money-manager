@@ -43,6 +43,9 @@ export function ActivityTableContextProvider({ children }: { children: React.Rea
     }, []);
 
     function refreshTable() {
+        getData().then((response) => {
+            setActivities(response);
+        });
     }
 
     return (

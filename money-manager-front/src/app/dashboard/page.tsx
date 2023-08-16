@@ -6,8 +6,8 @@ import { ActivityTableContextProvider } from "@/context/activity-table-context";
 export default function Dashboard() {
     return (
         <>
-            <InsertActivityForm />
             <ActivityTableContextProvider>
+                <InsertActivityForm />
                 <ActivityTable />
                 <ActivityBalance />
             </ActivityTableContextProvider>
