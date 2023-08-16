@@ -16,7 +16,6 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import JSXStyle from "styled-jsx/style";
 import { z } from "zod";
 
 enum ActivityType {
@@ -27,7 +26,7 @@ enum ActivityType {
 const insertFormSchema = z.object({
     date: z.date({ required_error: "Insira uma data" }),
     description: z.string({ required_error: "Insira uma descrição" }).min(3, { message: "Pelo menos três caracteres" }),
-    value: z.coerce.number({ required_error: "Insira um valor" }).min(0.01, {message: "Valor deve ser maior que zero"}),
+    value: z.coerce.number({ required_error: "Insira um valor" }),
     type: z.nativeEnum(ActivityType, { required_error: "Selecione um tipo" })
 });
 
@@ -75,21 +74,19 @@ export function InsertActivityForm() {
 
             const data = axiosError.response?.data as {message: string, code: number};
 
-            var error, errorCode;
+            var errorMessage;
 
             if(data){
-                error = data.message;
-                errorCode = data.code
+                errorMessage = data.message;
             } else {
-                error = axiosError.message;
-                errorCode = axiosError.status;
+                errorMessage = axiosError.message;
             }
 
             setInsertMessage(<>Deu ruim!</>);
 
             const message = <CustomAlert 
                 title={`Erro ao inserir a atividade!`}
-                message={`${error}. Código ${errorCode}`}
+                message={`${errorMessage}.`}
                 type={CustomAlertType.ERROR}
                 className="w-fit float-right mb-4"
             />
