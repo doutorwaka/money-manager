@@ -1,56 +1,20 @@
 'use client'
-
-import { frontendApi } from "@/lib/api";
-import { useEffect, useState } from "react";
-import { Activity, columns } from "./columns"
+import { ActivityTableContext } from "@/context/activity-table-context"
+import { useContext } from "react";
+import { columns } from "./columns"
 import { DataTable } from "./data-table"
 
-type ActivityType = {
-  id: string;
-  date: Date;
-  description: string;
-  value: number;
-  type: "expense" | "revenue";
-}
 
-type ActivitiesType = {
-  activities: ActivityType[];
-}
-
-async function getData(): Promise<ActivityType[]> {
-
-  var data: ActivityType[] = [];
-
-  try {
-    const result = await frontendApi.get("/activities");
-
-    const { activities } = result.data as ActivitiesType;
-
-    if (activities) {
-      data = activities;
-    }
-
-  } catch (e) {
-    data = [];
-  }
-
-  return data;
-
-}
 
 export function ActivityTable() {
 
-  const [data, setData] = useState<ActivityType[]>([]);
+  const activityTableContext = useContext(ActivityTableContext);
 
-  useEffect(() => {
-    getData().then((response) => {
-      setData(response);
-    });
-  }, []);
+  const activities = activityTableContext.activities;
 
   return (
     <div className="container mx-auto my-8">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={activities} />
     </div>
   )
 }

@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     }
 }
 
-type ActivityType = {
+export type ActivityType = {
     id: string;
     date: Date;
     description: string;
@@ -60,7 +60,7 @@ type ActivityType = {
     type: "expense" | "revenue";
 }
 
-type ActivitiesType = {
+export type ActivitiesType = {
     activities: ActivityType[];
 }
 
