@@ -27,7 +27,7 @@ enum ActivityType {
 const insertFormSchema = z.object({
     date: z.date({ required_error: "Insira uma data" }),
     description: z.string({ required_error: "Insira uma descrição" }).min(3, { message: "Pelo menos três caracteres" }),
-    value: z.coerce.number({ required_error: "Insira um valor" }),
+    value: z.coerce.number({ required_error: "Insira um valor" }).min(0.01, {message: "Valor deve ser maior que zero"}),
     type: z.nativeEnum(ActivityType, { required_error: "Selecione um tipo" })
 });
 
@@ -65,6 +65,7 @@ export function InsertActivityForm() {
                 title="Atividade inserida com sucesso!"
                 message={`A ${type} foi inserida com sucesso!`}
                 type={CustomAlertType.SUCCESS}
+                className="w-fit float-right mb-4"
             />
 
             setInsertMessage(message);
@@ -72,16 +73,31 @@ export function InsertActivityForm() {
         } catch (e) {
             const axiosError = e as AxiosError;
 
+            const data = axiosError.response?.data as {message: string, code: number};
+
+            var error, errorCode;
+
+            if(data){
+                error = data.message;
+                errorCode = data.code
+            } else {
+                error = axiosError.message;
+                errorCode = axiosError.status;
+            }
+
             setInsertMessage(<>Deu ruim!</>);
 
             const message = <CustomAlert 
                 title={`Erro ao inserir a atividade!`}
-                message={`${axiosError.response?.data.message}. Código ${axiosError.response?.data.code}`}
+                message={`${error}. Código ${errorCode}`}
                 type={CustomAlertType.ERROR}
+                className="w-fit float-right mb-4"
             />
 
             setInsertMessage(message);
         }
+
+        setTimeout(()=>setInsertMessage(<></>), 2500); // 2,5 seconds
 
     }
 

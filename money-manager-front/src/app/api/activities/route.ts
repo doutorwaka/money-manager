@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
         const jsonData = JSON.stringify(data);
 
-        const result = await backendApi.post("/activities", jsonData, {
+        const result = await backendApi.post("/activitiess", jsonData, {
             headers: {
                 "Authorization": `Bearer ${authToken}`
             }
@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
         if (status) {
             return new Response(JSON.stringify(new AxiosError(error, status.toString())), { status });
         } else {
+            console.log("Entrando aqui!", axiosError.message, axiosError.status)
             return new Response(JSON.stringify(axiosError.message), { status: axiosError.status });
         }
     }
